@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>수학창의공작소</title>
+  <meta name="description" content="수학 수업과 학교 업무에 바로 활용할 수 있는 웹도구 모음" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="index.html" aria-label="수학창의공작소 홈">
+        <div class="brand-icon">∑</div>
+        <div>
+          <h1>수학창의공작소</h1>
+          <p>by math chef</p>
+        </div>
+      </a>
+      <nav class="nav">
+        <a href="#tools">웹툴</a>
+        <a href="#about">소개</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-content">
+        <p class="eyebrow">교실과 업무를 가볍게 만드는 웹도구</p>
+        <h2>수학 수업과 학교 업무를<br /><span>더 빠르고 창의적으로.</span></h2>
+        <p class="hero-desc">
+          설치 없이 브라우저에서 바로 사용하는 수학·교육용 웹툴 모음입니다.
+          활동지 제작, 수업 시각화, 생기부 업무 보조 도구를 하나씩 채워갑니다.
+        </p>
+        <div class="hero-actions">
+          <a class="primary-btn" href="#tools">웹툴 둘러보기 <span>→</span></a>
+          <a class="secondary-btn" href="https://github.com/bsw0131/mathfactory" target="_blank" rel="noopener">GitHub 보기</a>
+        </div>
+      </div>
+      <div class="hero-card" aria-hidden="true">
+        <div class="math-window">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div class="formula">y = ax² + bx + c</div>
+          <div class="grid"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats" aria-label="웹툴 현황">
+      <div><strong id="toolCount">4</strong><span>개의 웹툴</span></div>
+      <div><strong>100%</strong><span>브라우저 실행</span></div>
+      <div><strong>0</strong><span>설치 필요</span></div>
+    </section>
+
+    <section id="tools" class="tools-section">
+      <div class="section-title">
+        <p>WEB TOOLS</p>
+        <h3>웹툴 모음</h3>
+      </div>
+
+      <div class="tool-grid" id="toolGrid"></div>
+    </section>
+
+    <section id="about" class="about-section">
+      <div>
+        <p class="eyebrow">ABOUT</p>
+        <h3>수업 준비와 학교 업무를 줄이는 작은 공작소</h3>
+      </div>
+      <p>
+        수학창의공작소는 교사가 직접 쓰기 좋은 도구를 모아두는 공간입니다.
+        처음에는 간단한 웹툴 모음으로 시작하고, 이후 생기부 텍스트화, 수학 활동지 생성,
+        그래프 시각화 도구 등을 추가할 수 있습니다.
+      </p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© 2026 수학창의공작소. Built with GitHub Pages.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
