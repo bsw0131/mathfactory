@@ -163,7 +163,7 @@ function appendContent(record, nextContent) {
   const inlineContent = inlineText(nextContent);
   if (!inlineContent) return;
   record.content = record.content
-    ? `${inlineText(record.content)} ${inlineContent}`
+    ? `${inlineText(record.content)}${inlineContent}`
     : inlineContent;
 }
 
