@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>생기부 텍스트화 | 수학창의공작소</title>
+  <meta name="description" content="엑셀 파일의 학생별 특기사항을 복사하기 좋은 텍스트 형식으로 변환하는 웹도구" />
+  <link rel="stylesheet" href="../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="../index.html" aria-label="수학창의공작소 홈">
+        <div class="brand-icon">∑</div>
+        <div>
+          <h1>수학창의공작소</h1>
+          <p>by math chef</p>
+        </div>
+      </a>
+      <nav class="nav">
+        <a href="../index.html#tools">웹툴</a>
+        <a href="../index.html#about">소개</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="tool-page-main">
+    <a class="back-link" href="../index.html">← 웹툴 모음으로 돌아가기</a>
+
+    <section class="tool-hero-small">
+      <p class="eyebrow">SCHOOL RECORD TEXTIFIER</p>
+      <h2>생기부 엑셀을<br><span>복사하기 좋은 텍스트로.</span></h2>
+      <p>엑셀 파일을 올리고 이름 열과 특기사항 열을 선택하면 학생별 텍스트를 자동으로 정리합니다. 파일은 브라우저 안에서만 처리됩니다.</p>
+    </section>
+
+    <section class="tool-app">
+      <div class="panel">
+        <h3>1. 엑셀 파일 선택</h3>
+        <div class="form-group">
+          <label for="fileInput">엑셀 파일</label>
+          <input id="fileInput" type="file" accept=".xlsx,.xls,.csv" />
+          <small>.xlsx, .xls, .csv 파일을 사용할 수 있습니다.</small>
+        </div>
+
+        <div class="form-group">
+          <label for="sheetSelect">시트 선택</label>
+          <select id="sheetSelect" disabled>
+            <option>파일을 먼저 선택하세요</option>
+          </select>
+        </div>
+
+        <div class="inline-grid">
+          <div class="form-group">
+            <label for="nameColumn">이름 열</label>
+            <select id="nameColumn" disabled></select>
+          </div>
+          <div class="form-group">
+            <label for="contentColumn">특기사항 열</label>
+            <select id="contentColumn" disabled></select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="formatSelect">출력 형식</label>
+          <select id="formatSelect">
+            <option value="basic">이름|특기사항 + 구분선</option>
+            <option value="simple">이름|특기사항</option>
+            <option value="numbered">번호. 이름 - 특기사항</option>
+          </select>
+        </div>
+
+        <div class="button-row">
+          <button class="action-btn" id="convertBtn" disabled>텍스트 변환</button>
+          <button class="action-btn secondary" id="clearBtn">초기화</button>
+        </div>
+
+        <div class="notice">
+          개인정보 보호를 위해 변환 작업은 서버로 전송하지 않고 현재 브라우저에서만 처리됩니다.
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>2. 미리보기와 결과</h3>
+        <div class="form-group">
+          <label>엑셀 미리보기</label>
+          <div class="preview-table-wrap" id="previewArea">
+            <table class="preview-table"><tbody><tr><td>엑셀 파일을 선택하면 이곳에 일부 행이 표시됩니다.</td></tr></tbody></table>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="resultText">변환 결과</label>
+          <textarea id="resultText" placeholder="변환 결과가 이곳에 표시됩니다."></textarea>
+        </div>
+
+        <div class="button-row">
+          <button class="action-btn" id="copyBtn" disabled>결과 복사</button>
+          <button class="action-btn secondary" id="downloadBtn" disabled>TXT 다운로드</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© 2026 수학창의공작소. Built with GitHub Pages.</p>
+  </footer>
+
+  <script src="../tools/student-record-textifier.js"></script>
+</body>
+</html>

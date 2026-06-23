@@ -3,8 +3,8 @@ const tools = [
     icon: '📄',
     title: '생기부 텍스트화',
     desc: '엑셀 파일의 학생별 특기사항을 복사하기 좋은 텍스트 형식으로 정리합니다.',
-    badge: '준비 중',
-    link: '#'
+    badge: '사용 가능',
+    link: 'tools/student-record-textifier.html'
   },
   {
     icon: '📈',
