@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>몬티홀 딜레마 게임 | 수학창의공작소</title>
+  <meta name="description" content="직접 선택하고 확률 실험까지 해보는 몬티홀 딜레마 게임" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css" />
+  <link rel="stylesheet" href="monty-hall.css" />
+</head>
+<body class="monty-page">
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="../index.html" aria-label="수학창의공작소 홈">
+        <span class="brand-mark">Σ</span>
+        <span class="brand-text">
+          <strong>수학창의공작소</strong>
+          <em>by math chef</em>
+        </span>
+      </a>
+      <nav class="nav" aria-label="주요 메뉴">
+        <a href="../index.html#home">홈</a>
+        <a href="../index.html#math-tools" class="active">수학수업도움</a>
+        <a href="../index.html#school-tools">학교업무도움</a>
+        <a href="../index.html#about">소개</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="monty-main">
+    <section class="monty-hero container">
+      <a class="back-link" href="../index.html#math-tools">수학수업도움으로 돌아가기</a>
+      <p class="eyebrow">MONTY HALL DILEMMA</p>
+      <h2>문을 바꾸는 게<br><span>정말 유리할까?</span></h2>
+      <p class="monty-intro">학생들이 직접 문을 고르고, 유지와 변경을 선택한 뒤 100번·1000번 확률 실험으로 결과를 비교합니다.</p>
+    </section>
+
+    <section class="monty-app container" aria-label="몬티홀 딜레마 게임 영역">
+      <section class="play-panel">
+        <div class="game-topline">
+          <div>
+            <span class="game-kicker">직접 해보기</span>
+            <h3 id="roundTitle">문 하나를 선택하세요</h3>
+          </div>
+          <div class="round-box">
+            <strong id="roundCount">1</strong>
+            <span>라운드</span>
+          </div>
+        </div>
+
+        <div class="door-row" id="doorRow" aria-label="문 선택"></div>
+
+        <div class="choice-actions" id="choiceActions">
+          <button class="action-btn secondary" id="stayBtn" type="button" disabled>그대로 유지</button>
+          <button class="action-btn" id="switchBtn" type="button" disabled>다른 문으로 변경</button>
+        </div>
+
+        <p class="message" id="message">상품이 숨겨진 문을 맞혀 보세요.</p>
+      </section>
+
+      <aside class="control-panel">
+        <div class="panel-title-row">
+          <span class="step-badge">1</span>
+          <div>
+            <h3>게임 기록</h3>
+            <p>학생들이 직접 선택한 결과를 누적합니다.</p>
+          </div>
+        </div>
+
+        <div class="score-board">
+          <div class="score-card"><strong id="playTotal">0</strong><span>시도</span></div>
+          <div class="score-card"><strong id="playWins">0</strong><span>성공</span></div>
+          <div class="score-card"><strong id="playRate">0%</strong><span>성공률</span></div>
+        </div>
+
+        <button class="action-btn full" id="newRoundBtn" type="button">새 라운드</button>
+        <button class="action-btn secondary full" id="resetPlayBtn" type="button">기록 초기화</button>
+
+        <div class="rule-card">
+          <div><strong>1</strong><span>세 문 중 하나를 고릅니다.</span></div>
+          <div><strong>2</strong><span>사회자가 상품이 없는 문 하나를 엽니다.</span></div>
+          <div><strong>3</strong><span>처음 선택을 유지하거나 다른 문으로 바꿉니다.</span></div>
+        </div>
+      </aside>
+
+      <section class="simulation-panel">
+        <div class="panel-title-row compact">
+          <span class="step-badge">2</span>
+          <div>
+            <h3>확률 실험</h3>
+            <p>여러 번 반복하면 전략별 승률이 어떻게 달라지는지 확인합니다.</p>
+          </div>
+        </div>
+
+        <div class="sim-controls">
+          <button class="action-btn" data-sim="100" type="button">100번 실험</button>
+          <button class="action-btn" data-sim="1000" type="button">1000번 실험</button>
+          <label class="custom-sim" for="customCount">
+            <span>직접 입력</span>
+            <input id="customCount" type="number" min="10" max="100000" step="10" value="500" />
+          </label>
+          <button class="action-btn secondary" id="customSimBtn" type="button">실험하기</button>
+        </div>
+
+        <div class="sim-result" id="simResult">
+          <div class="empty-result">아직 확률 실험 결과가 없습니다.</div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner compact-footer">
+      <p>© 2026 수학창의공작소. Built with GitHub Pages.</p>
+      <div class="footer-links">
+        <a href="../index.html#math-tools">수학수업도움</a>
+        <a href="../index.html#about">소개</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="monty-hall.js"></script>
+</body>
+</html>
