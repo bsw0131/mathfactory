@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>소수 찾기 게임 | 수학창의공작소</title>
+  <meta name="description" content="20초 안에 숫자 30개 중 소수를 최대한 많이 찾는 수학 게임" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css" />
+  <link rel="stylesheet" href="prime-finder.css" />
+</head>
+<body class="prime-page">
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="../index.html" aria-label="수학창의공작소 홈">
+        <span class="brand-mark">Σ</span>
+        <span class="brand-text">
+          <strong>수학창의공작소</strong>
+          <em>by math chef</em>
+        </span>
+      </a>
+      <nav class="nav" aria-label="주요 메뉴">
+        <a href="../index.html#home">홈</a>
+        <a href="../index.html#math-tools" class="active">수학수업도움</a>
+        <a href="../index.html#school-tools">학교업무도움</a>
+        <a href="../index.html#about">소개</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="prime-main">
+    <section class="prime-hero container">
+      <a class="back-link" href="../index.html#math-tools">수학수업도움으로 돌아가기</a>
+      <p class="eyebrow">PRIME FINDER</p>
+      <h2>20초 안에 찾는<br><span>소수 찾기 게임</span></h2>
+      <p class="prime-intro">화면에 나타난 숫자 30개 중 소수만 빠르게 골라 보세요.</p>
+    </section>
+
+    <section class="prime-app container" aria-label="소수 찾기 게임 영역">
+      <section class="game-panel">
+        <div class="game-topline">
+          <div>
+            <span class="game-kicker">현재 라운드</span>
+            <h3>숫자 30개 중 소수 찾기</h3>
+          </div>
+          <div class="timer-box" id="timerBox">
+            <strong id="timeLeft">20</strong>
+            <span>초</span>
+          </div>
+        </div>
+
+        <div class="number-grid" id="numberGrid" aria-label="숫자 목록"></div>
+
+        <p class="message" id="message">시작 버튼을 누르면 20초 타이머가 시작됩니다.</p>
+      </section>
+
+      <aside class="control-panel">
+        <div class="panel-title-row">
+          <span class="step-badge">1</span>
+          <div>
+            <h3>게임 진행</h3>
+            <p>시작 후 소수라고 생각하는 숫자를 누르세요.</p>
+          </div>
+        </div>
+
+        <div class="button-stack">
+          <button class="action-btn" id="startBtn" type="button">시작</button>
+          <button class="action-btn secondary" id="newRoundBtn" type="button">새 숫자</button>
+        </div>
+
+        <div class="score-board">
+          <div class="score-card"><strong id="selectedCount">0</strong><span>선택</span></div>
+          <div class="score-card"><strong id="primeCount">0</strong><span>전체 소수</span></div>
+          <div class="score-card"><strong id="scoreText">0</strong><span>점수</span></div>
+        </div>
+
+        <div class="rule-card">
+          <div><strong>소수</strong><span>1보다 크고 약수가 1과 자기 자신뿐인 수</span></div>
+          <div><strong>시간</strong><span>한 라운드 20초</span></div>
+          <div><strong>목표</strong><span>소수는 많이, 합성수는 누르지 않기</span></div>
+        </div>
+      </aside>
+
+      <section class="result-panel">
+        <div class="panel-title-row compact">
+          <span class="step-badge">2</span>
+          <div>
+            <h3>결과</h3>
+            <p>라운드가 끝나면 정답과 오답을 확인하세요.</p>
+          </div>
+        </div>
+        <div class="result-list" id="resultList">
+          <div class="empty-result">아직 결과가 없습니다.</div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner compact-footer">
+      <p>© 2026 수학창의공작소. Built with GitHub Pages.</p>
+      <div class="footer-links">
+        <a href="../index.html#math-tools">수학수업도움</a>
+        <a href="../index.html#about">소개</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="prime-finder.js"></script>
+</body>
+</html>
