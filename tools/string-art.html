@@ -50,6 +50,20 @@
 
         <div class="template-list" id="templateList" aria-label="도안 목록"></div>
 
+        <div class="option-panel point-control-panel">
+          <h3>난이도 조절</h3>
+          <label class="number-row" for="pointCountInput">
+            <span>점 개수</span>
+            <input type="number" id="pointCountInput" min="12" max="160" step="1" inputmode="numeric" />
+          </label>
+          <input type="range" id="pointCountRange" min="12" max="160" step="1" />
+          <div class="point-actions">
+            <button class="mini-btn" id="applyPointCountBtn" type="button">확인</button>
+            <button class="mini-btn secondary" id="resetPointCountBtn" type="button">기본값</button>
+          </div>
+          <p class="option-help" id="pointCountHelp">점 개수를 바꾸면 선택한 도안만 다시 그려집니다.</p>
+        </div>
+
         <div class="option-panel">
           <h3>표시 옵션</h3>
           <label class="toggle-row">
