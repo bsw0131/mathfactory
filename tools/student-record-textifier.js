@@ -160,10 +160,11 @@ function buildStudentRecords(nameIdx, contentIdx) {
 }
 
 function appendContent(record, nextContent) {
-  if (!nextContent) return;
+  const inlineContent = inlineText(nextContent);
+  if (!inlineContent) return;
   record.content = record.content
-    ? `${record.content}\n${nextContent}`
-    : nextContent;
+    ? `${inlineText(record.content)} ${inlineContent}`
+    : inlineContent;
 }
 
 function isHeaderLikeRow(row) {
@@ -180,6 +181,13 @@ function clean(value) {
     .replace(/\r\n/g, '\n')
     .replace(/\r/g, '\n')
     .replace(/[ \t]+/g, ' ')
+    .trim();
+}
+
+function inlineText(value) {
+  return clean(value)
+    .replace(/\n+/g, ' ')
+    .replace(/\s+/g, ' ')
     .trim();
 }
 
