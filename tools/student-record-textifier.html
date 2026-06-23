@@ -5,39 +5,51 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>생기부 텍스트화 | 수학창의공작소</title>
   <meta name="description" content="엑셀 파일의 학생별 특기사항을 복사하기 좋은 텍스트 형식으로 변환하는 웹도구" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../style.css" />
+  <link rel="stylesheet" href="student-record-textifier.css" />
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
-<body>
+<body class="record-tool-page">
   <header class="site-header">
-    <div class="header-inner">
+    <div class="container header-inner">
       <a class="brand" href="../index.html" aria-label="수학창의공작소 홈">
-        <div class="brand-icon">∑</div>
-        <div>
-          <h1>수학창의공작소</h1>
-          <p>by math chef</p>
-        </div>
+        <span class="brand-mark">Σ</span>
+        <span class="brand-text">
+          <strong>수학창의공작소</strong>
+          <em>by math chef</em>
+        </span>
       </a>
-      <nav class="nav">
-        <a href="../index.html#tools">웹툴</a>
+      <nav class="nav" aria-label="주요 메뉴">
+        <a href="../index.html#home">홈</a>
+        <a href="../index.html#math-tools">수학수업도움</a>
+        <a href="../index.html#school-tools" class="active">학교업무도움</a>
         <a href="../index.html#about">소개</a>
       </nav>
     </div>
   </header>
 
   <main class="tool-page-main">
-    <a class="back-link" href="../index.html">← 웹툴 모음으로 돌아가기</a>
-
-    <section class="tool-hero-small">
+    <section class="tool-hero-small container">
+      <a class="back-link" href="../index.html">웹툴 모음으로 돌아가기</a>
       <p class="eyebrow">SCHOOL RECORD TEXTIFIER</p>
       <h2>생기부 엑셀을<br><span>복사하기 좋은 텍스트로.</span></h2>
-      <p>엑셀 파일을 올리고 이름 열과 특기사항 열을 선택하면 학생별 텍스트를 자동으로 정리합니다. 파일은 브라우저 안에서만 처리됩니다.</p>
+      <p class="tool-intro">엑셀 파일을 올리고 이름 열과 특기사항 열을 선택하면 학생별 텍스트를 자동으로 정리합니다. 파일은 브라우저 안에서만 처리됩니다.</p>
     </section>
 
-    <section class="tool-app">
-      <div class="panel">
-        <h3>1. 엑셀 파일 선택</h3>
-        <div class="form-group">
+    <section class="tool-app container" aria-label="생기부 텍스트화 작업 영역">
+      <div class="panel input-panel">
+        <div class="panel-title-row">
+          <span class="step-badge">1</span>
+          <div>
+            <h3>엑셀 파일 선택</h3>
+            <p>파일을 올린 뒤 시트와 열을 지정하세요.</p>
+          </div>
+        </div>
+
+        <div class="form-group file-group">
           <label for="fileInput">엑셀 파일</label>
           <input id="fileInput" type="file" accept=".xlsx,.xls,.csv" />
           <small>.xlsx, .xls, .csv 파일을 사용할 수 있습니다.</small>
@@ -80,16 +92,23 @@
         </div>
       </div>
 
-      <div class="panel">
-        <h3>2. 미리보기와 결과</h3>
-        <div class="form-group">
+      <div class="panel result-panel">
+        <div class="panel-title-row">
+          <span class="step-badge">2</span>
+          <div>
+            <h3>미리보기와 결과</h3>
+            <p>엑셀 내용을 확인하고 결과를 복사하거나 내려받으세요.</p>
+          </div>
+        </div>
+
+        <div class="form-group preview-group">
           <label>엑셀 미리보기</label>
           <div class="preview-table-wrap" id="previewArea">
             <table class="preview-table"><tbody><tr><td>엑셀 파일을 선택하면 이곳에 일부 행이 표시됩니다.</td></tr></tbody></table>
           </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group result-group">
           <label for="resultText">변환 결과</label>
           <textarea id="resultText" placeholder="변환 결과가 이곳에 표시됩니다."></textarea>
         </div>
@@ -103,7 +122,13 @@
   </main>
 
   <footer class="footer">
-    <p>© 2026 수학창의공작소. Built with GitHub Pages.</p>
+    <div class="container footer-inner compact-footer">
+      <p>© 2026 수학창의공작소. Built with GitHub Pages.</p>
+      <div class="footer-links">
+        <a href="../index.html#school-tools">학교업무도움</a>
+        <a href="../index.html#about">소개</a>
+      </div>
+    </div>
   </footer>
 
   <script src="../tools/student-record-textifier.js"></script>
