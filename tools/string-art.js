@@ -1,57 +1,77 @@
-const templates = [
+const templateConfigs = [
   {
     id: 'circle',
     name: '원형 도안',
-    detail: '64점 · 원 둘레',
     guide: 'circle',
-    points: makeCirclePoints(64, 360, 360, 284),
-    threadSkip: 17,
-    center: true
+    defaultCount: 64,
+    minCount: 16,
+    maxCount: 160,
+    threadRatio: .27,
+    center: true,
+    makePoints: count => makeCirclePoints(count, 360, 360, 284)
   },
   {
     id: 'grid',
     name: '격자 도안',
-    detail: '73점 · 사각 격자',
     guide: 'grid',
-    points: makeGridPoints(),
-    threadSkip: 9,
-    center: false
+    defaultCount: 92,
+    minCount: 24,
+    maxCount: 180,
+    threadRatio: .13,
+    center: false,
+    makePoints: count => makeGridPoints(count)
   },
   {
     id: 'heart',
     name: '하트 도안',
-    detail: '72점 · 대칭 곡선',
     guide: 'polyline',
-    points: makeHeartPoints(72),
-    threadSkip: 23,
-    center: true
+    defaultCount: 72,
+    minCount: 24,
+    maxCount: 160,
+    threadRatio: .32,
+    center: true,
+    makePoints: count => makeHeartPoints(count)
   },
   {
     id: 'star',
     name: '별 도안',
-    detail: '60점 · 오각 별',
     guide: 'polyline',
-    points: makeStarPoints(60),
-    threadSkip: 24,
-    center: true
+    defaultCount: 60,
+    minCount: 20,
+    maxCount: 150,
+    threadRatio: .40,
+    center: true,
+    makePoints: count => makeStarPoints(count)
   },
   {
     id: 'spiral',
     name: '나선형 도안',
-    detail: '78점 · 회전 곡선',
     guide: 'polyline',
-    points: makeSpiralPoints(78),
-    threadSkip: 8,
-    center: true
+    defaultCount: 78,
+    minCount: 24,
+    maxCount: 180,
+    threadRatio: .10,
+    center: true,
+    makePoints: count => makeSpiralPoints(count)
   }
 ];
 
-let selectedTemplate = templates[0];
+const pointCounts = Object.fromEntries(
+  templateConfigs.map(template => [template.id, template.defaultCount])
+);
+
+let selectedConfig = templateConfigs[0];
+let selectedTemplate = buildTemplate(selectedConfig);
 
 const templateList = document.querySelector('#templateList');
 const artBoard = document.querySelector('#artBoard');
 const templateTitle = document.querySelector('#templateTitle');
 const templateMeta = document.querySelector('#templateMeta');
+const pointCountInput = document.querySelector('#pointCountInput');
+const pointCountRange = document.querySelector('#pointCountRange');
+const applyPointCountBtn = document.querySelector('#applyPointCountBtn');
+const resetPointCountBtn = document.querySelector('#resetPointCountBtn');
+const pointCountHelp = document.querySelector('#pointCountHelp');
 const showGuide = document.querySelector('#showGuide');
 const showThreads = document.querySelector('#showThreads');
 const showNumbers = document.querySelector('#showNumbers');
@@ -60,43 +80,104 @@ const downloadSvgBtn = document.querySelector('#downloadSvgBtn');
 const printBtn = document.querySelector('#printBtn');
 
 renderTemplateButtons();
+syncPointControls();
 renderSelectedTemplate();
 
 [showGuide, showThreads, showNumbers, showCenter].forEach(input => {
   input.addEventListener('change', renderSelectedTemplate);
 });
 
+pointCountInput.addEventListener('input', () => {
+  const count = Number(pointCountInput.value);
+  if (Number.isFinite(count)) {
+    pointCountRange.value = String(clampCount(count, selectedConfig));
+  }
+});
+pointCountInput.addEventListener('change', applyPointCount);
+pointCountRange.addEventListener('input', () => {
+  pointCountInput.value = pointCountRange.value;
+  applyPointCount();
+});
+applyPointCountBtn.addEventListener('click', applyPointCount);
+resetPointCountBtn.addEventListener('click', resetPointCount);
 downloadSvgBtn.addEventListener('click', downloadSvg);
 printBtn.addEventListener('click', () => window.print());
 
 function renderTemplateButtons() {
-  templateList.innerHTML = templates.map(template => `
-    <button class="template-card${template.id === selectedTemplate.id ? ' active' : ''}" type="button" data-template-id="${template.id}">
-      <span class="template-thumb" aria-hidden="true">${createSvg(template, { thumbnail: true })}</span>
-      <span>
-        <span class="template-name">${template.name}</span>
-        <span class="template-detail">${template.detail}</span>
-      </span>
-    </button>
-  `).join('');
+  templateList.innerHTML = templateConfigs.map(config => {
+    const template = buildTemplate(config);
+    return `
+      <button class="template-card${config.id === selectedConfig.id ? ' active' : ''}" type="button" data-template-id="${config.id}">
+        <span class="template-thumb" aria-hidden="true">${createSvg(template, { thumbnail: true })}</span>
+        <span>
+          <span class="template-name">${config.name}</span>
+          <span class="template-detail">${template.points.length}점 · ${difficultyLabel(template.points.length, config)}</span>
+        </span>
+      </button>
+    `;
+  }).join('');
 
   templateList.querySelectorAll('.template-card').forEach(button => {
     button.addEventListener('click', () => {
-      selectedTemplate = templates.find(template => template.id === button.dataset.templateId);
+      selectedConfig = templateConfigs.find(template => template.id === button.dataset.templateId);
+      selectedTemplate = buildTemplate(selectedConfig);
       renderTemplateButtons();
+      syncPointControls();
       renderSelectedTemplate();
     });
   });
 }
 
 function renderSelectedTemplate() {
+  selectedTemplate = buildTemplate(selectedConfig);
   templateTitle.textContent = selectedTemplate.name;
   artBoard.innerHTML = createSvg(selectedTemplate, getOptions());
   templateMeta.innerHTML = `
     <div class="meta-chip"><strong>${selectedTemplate.points.length}</strong><span>점 개수</span></div>
     <div class="meta-chip"><strong>${selectedTemplate.threadSkip}</strong><span>연결 간격</span></div>
-    <div class="meta-chip"><strong>A4</strong><span>인쇄 기준</span></div>
+    <div class="meta-chip"><strong>${difficultyLabel(selectedTemplate.points.length, selectedConfig)}</strong><span>난이도</span></div>
   `;
+}
+
+function syncPointControls() {
+  const count = pointCounts[selectedConfig.id];
+  pointCountInput.min = String(selectedConfig.minCount);
+  pointCountInput.max = String(selectedConfig.maxCount);
+  pointCountInput.value = String(count);
+  pointCountRange.min = String(selectedConfig.minCount);
+  pointCountRange.max = String(selectedConfig.maxCount);
+  pointCountRange.value = String(count);
+  pointCountHelp.textContent = `${selectedConfig.minCount}점부터 ${selectedConfig.maxCount}점까지 조절할 수 있습니다. 현재 ${count}점입니다.`;
+}
+
+function applyPointCount() {
+  const nextCount = clampCount(Number(pointCountInput.value), selectedConfig);
+  pointCounts[selectedConfig.id] = nextCount;
+  pointCountInput.value = String(nextCount);
+  pointCountRange.value = String(nextCount);
+  pointCountHelp.textContent = `${selectedConfig.name}을 ${nextCount}점으로 다시 그렸습니다.`;
+  renderTemplateButtons();
+  renderSelectedTemplate();
+}
+
+function resetPointCount() {
+  pointCounts[selectedConfig.id] = selectedConfig.defaultCount;
+  syncPointControls();
+  renderTemplateButtons();
+  renderSelectedTemplate();
+}
+
+function buildTemplate(config) {
+  const count = clampCount(pointCounts[config.id], config);
+  const points = config.makePoints(count);
+  return {
+    id: config.id,
+    name: config.name,
+    guide: config.guide,
+    points,
+    threadSkip: getThreadSkip(points.length, config.threadRatio),
+    center: config.center
+  };
 }
 
 function getOptions() {
@@ -177,7 +258,7 @@ function downloadSvg() {
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement('a');
   anchor.href = url;
-  anchor.download = `${selectedTemplate.name.replace(/\s/g, '_')}.svg`;
+  anchor.download = `${selectedTemplate.name.replace(/\s/g, '_')}_${selectedTemplate.points.length}점.svg`;
   document.body.appendChild(anchor);
   anchor.click();
   anchor.remove();
@@ -194,22 +275,28 @@ function makeCirclePoints(count, cx, cy, radius) {
   });
 }
 
-function makeGridPoints() {
-  const points = [];
+function makeGridPoints(count) {
   const min = 72;
   const max = 648;
   const mid = 360;
-  const count = 17;
-  const step = (max - min) / (count - 1);
+  const candidates = [];
+  const perimeterSamples = Math.max(80, count * 4);
+  const crossSamples = Math.max(36, count * 2);
 
-  for (let i = 0; i < count; i++) points.push({ x: min + step * i, y: min });
-  for (let i = 1; i < count; i++) points.push({ x: max, y: min + step * i });
-  for (let i = count - 2; i >= 0; i--) points.push({ x: min + step * i, y: max });
-  for (let i = count - 2; i > 0; i--) points.push({ x: min, y: min + step * i });
-  for (let i = 1; i < count - 1; i++) points.push({ x: min + step * i, y: mid });
-  for (let i = 1; i < count - 1; i++) points.push({ x: mid, y: min + step * i });
+  for (let i = 0; i < perimeterSamples; i++) {
+    const t = i / perimeterSamples;
+    candidates.push(pointOnRect(t, min, max));
+  }
+  for (let i = 1; i < crossSamples; i++) {
+    const t = i / crossSamples;
+    candidates.push({ x: min + (max - min) * t, y: mid });
+  }
+  for (let i = 1; i < crossSamples; i++) {
+    const t = i / crossSamples;
+    candidates.push({ x: mid, y: min + (max - min) * t });
+  }
 
-  return uniquePoints(points);
+  return sampleEvenly(uniquePoints(candidates), count);
 }
 
 function makeHeartPoints(count) {
@@ -236,13 +323,49 @@ function makeStarPoints(count) {
 
 function makeSpiralPoints(count) {
   return Array.from({ length: count }, (_, index) => {
-    const t = index / (count - 1);
+    const t = count === 1 ? 0 : index / (count - 1);
     const angle = (Math.PI * 7.4 * t) - Math.PI / 2;
     const radius = 28 + 282 * t;
     return {
       x: 360 + Math.cos(angle) * radius,
       y: 360 + Math.sin(angle) * radius
     };
+  });
+}
+
+function pointOnRect(t, min, max) {
+  const side = Math.floor(t * 4);
+  const local = (t * 4) - side;
+  if (side === 0) return { x: min + (max - min) * local, y: min };
+  if (side === 1) return { x: max, y: min + (max - min) * local };
+  if (side === 2) return { x: max - (max - min) * local, y: max };
+  return { x: min, y: max - (max - min) * local };
+}
+
+function getThreadSkip(count, ratio) {
+  const skip = Math.round(count * ratio);
+  return Math.max(2, Math.min(count - 1, skip));
+}
+
+function difficultyLabel(count, config) {
+  const range = config.maxCount - config.minCount;
+  const level = (count - config.minCount) / range;
+  if (level < .34) return '쉬움';
+  if (level < .67) return '보통';
+  return '어려움';
+}
+
+function clampCount(value, config) {
+  const number = Number.isFinite(value) ? Math.round(value) : config.defaultCount;
+  return Math.max(config.minCount, Math.min(config.maxCount, number));
+}
+
+function sampleEvenly(points, count) {
+  if (points.length <= count) return points;
+  if (count <= 1) return points.slice(0, count);
+  return Array.from({ length: count }, (_, index) => {
+    const sourceIndex = Math.round((index * (points.length - 1)) / (count - 1));
+    return points[sourceIndex];
   });
 }
 
