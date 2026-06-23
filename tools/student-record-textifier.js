@@ -53,11 +53,20 @@ function loadSelectedSheet() {
 }
 
 function findHeaderRow(data) {
-  for (let i = 0; i < Math.min(data.length, 10); i++) {
+  const headerKeywords = ['학년', '반', '번호', '성명', '이름', '특기사항', '이수시간'];
+  let bestIndex = 0;
+  let bestScore = -1;
+
+  for (let i = 0; i < Math.min(data.length, 20); i++) {
+    const rowText = data[i].map(cell => String(cell).replace(/\s/g, '')).join('|');
     const filled = data[i].filter(cell => String(cell).trim() !== '').length;
-    if (filled >= 2) return i;
+    const score = headerKeywords.reduce((sum, keyword) => sum + (rowText.includes(keyword) ? 2 : 0), 0) + Math.min(filled, 6);
+    if (score > bestScore) {
+      bestScore = score;
+      bestIndex = i;
+    }
   }
-  return 0;
+  return bestIndex;
 }
 
 function renderColumnOptions() {
@@ -71,11 +80,14 @@ function renderColumnOptions() {
   nameColumn.disabled = false;
   contentColumn.disabled = false;
 
-  const nameGuess = guessColumn(['이름', '성명', '학생명', '학생']);
-  const contentGuess = guessColumn(['특기', '사항', '내용', '세특', '행동', '종합', '평가']);
+  const nameGuess = guessColumn(['성명', '이름', '학생명', '학생']);
+  const contentGuess = guessColumn(['특기사항', '특기', '세부능력', '세특', '내용', '행동특성', '종합의견', '평가']);
 
-  if (nameGuess >= 0) nameColumn.value = nameGuess;
-  if (contentGuess >= 0) contentColumn.value = contentGuess;
+  if (nameGuess >= 0) nameColumn.value = String(nameGuess);
+  if (contentGuess >= 0) contentColumn.value = String(contentGuess);
+  if (nameColumn.value === contentColumn.value && headers.length > 1) {
+    contentColumn.value = String(Math.max(0, headers.length - 1));
+  }
 }
 
 function guessColumn(keywords) {
@@ -99,13 +111,20 @@ function convertRows() {
   const contentIdx = Number(contentColumn.value);
   const format = formatSelect.value;
 
+  if (nameIdx === contentIdx) {
+    alert('이름 열과 특기사항 열이 같습니다. 이름 열은 성명, 특기사항 열은 특기사항으로 선택해 주세요.');
+    return;
+  }
+
+  let itemNo = 1;
   const converted = rows
-    .map((row, index) => {
+    .map((row) => {
       const name = clean(row[nameIdx]);
       const content = clean(row[contentIdx]);
       if (!name && !content) return '';
+      if (isHeaderLikeRow(row)) return '';
       if (format === 'simple') return `${name}|${content}`;
-      if (format === 'numbered') return `${index + 1}. ${name} - ${content}`;
+      if (format === 'numbered') return `${itemNo++}. ${name} - ${content}`;
       return `${name}|\n${content}\n\n==================================================`;
     })
     .filter(Boolean)
@@ -114,6 +133,15 @@ function convertRows() {
   resultText.value = converted;
   copyBtn.disabled = converted.length === 0;
   downloadBtn.disabled = converted.length === 0;
+}
+
+function isHeaderLikeRow(row) {
+  const name = clean(row[Number(nameColumn.value)]);
+  const content = clean(row[Number(contentColumn.value)]);
+  const joined = row.map(cell => clean(cell)).join('|').replace(/\s/g, '');
+  if (['성명', '이름', '학생명'].includes(name)) return true;
+  if (['특기사항', '내용', '세특'].includes(content)) return true;
+  return ['학년', '반', '번호', '성명', '특기사항'].filter(keyword => joined.includes(keyword)).length >= 3;
 }
 
 function clean(value) {
