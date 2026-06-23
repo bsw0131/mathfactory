@@ -1,0 +1,122 @@
+.tool-index-page {
+  background:
+    radial-gradient(circle at 88% 8%, rgba(70, 88, 255, .10), transparent 30%),
+    radial-gradient(circle at 8% 18%, rgba(0, 184, 169, .10), transparent 28%),
+    linear-gradient(180deg, #f8fbff 0%, #ffffff 64%);
+}
+
+.tool-index-main {
+  padding: 46px 0 78px;
+}
+
+.tool-index-hero {
+  padding: 18px 0 34px;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 22px;
+  color: #4658ff;
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.back-link::before {
+  content: "←";
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: #eef2ff;
+}
+
+.tool-index-hero .eyebrow {
+  margin-bottom: 18px;
+}
+
+.math-index-page .tool-index-hero .eyebrow {
+  color: #4658ff;
+}
+
+.school-index-page .tool-index-hero .eyebrow {
+  color: #11a37f;
+  border-color: #ccefe7;
+}
+
+.tool-index-hero h1 {
+  max-width: 830px;
+  margin: 0;
+  color: #071a44;
+  font-size: 58px;
+  line-height: 1.15;
+  font-weight: 900;
+}
+
+.tool-index-hero h1 span {
+  color: #4658ff;
+}
+
+.school-index-page .tool-index-hero h1 span {
+  color: #11a37f;
+}
+
+.tool-index-hero p:not(.eyebrow) {
+  max-width: 900px;
+  margin: 24px 0 0;
+  color: #42506c;
+  font-size: 20px;
+  line-height: 1.8;
+  font-weight: 700;
+}
+
+.tool-index-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  padding-bottom: 16px;
+}
+
+.tool-index-grid .tool-item {
+  min-height: 172px;
+}
+
+.compact-footer {
+  min-height: 28px;
+}
+
+@media (max-width: 1080px) {
+  .tool-index-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 780px) {
+  .tool-index-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .tool-index-hero h1 {
+    font-size: 46px;
+  }
+}
+
+@media (max-width: 540px) {
+  .tool-index-main {
+    padding-top: 32px;
+  }
+
+  .tool-index-hero h1 {
+    font-size: 36px;
+  }
+
+  .tool-index-hero p:not(.eyebrow) {
+    font-size: 17px;
+  }
+
+  .tool-index-grid {
+    grid-template-columns: 1fr;
+  }
+}
