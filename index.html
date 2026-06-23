@@ -9,6 +9,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
+  <style>
+    .panel-title-link{display:inline-flex;align-items:center;gap:10px}
+    .panel-title-link .more-label{padding:5px 10px;border-radius:999px;background:#eef2ff;color:#4053ff;font-size:13px;font-weight:900;letter-spacing:0}
+    .school .panel-title-link .more-label{background:#ecfbf7;color:#009b7d}
+    .panel-title-link:hover .more-label{transform:translateX(2px)}
+  </style>
 </head>
 <body>
   <header class="site-header">
@@ -89,7 +95,7 @@
           <div class="panel-head">
             <div class="panel-icon">📈</div>
             <div>
-              <h2>수학수업도움</h2>
+              <h2><a class="panel-title-link" href="tools/math-tools.html">수학수업도움 <span class="more-label">더보기</span></a></h2>
               <p>수업 준비부터 학생 활동까지, 수학 수업을 더 풍성하게 만드는 도구</p>
             </div>
           </div>
@@ -121,7 +127,7 @@
           <div class="panel-head">
             <div class="panel-icon">📁</div>
             <div>
-              <h2>학교업무도움</h2>
+              <h2><a class="panel-title-link" href="tools/school-tools.html">학교업무도움 <span class="more-label">더보기</span></a></h2>
               <p>반복 업무는 줄이고, 중요한 일에 더 집중하도록 돕는 도구</p>
             </div>
           </div>
