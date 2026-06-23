@@ -116,23 +116,54 @@ function convertRows() {
     return;
   }
 
+  const records = buildStudentRecords(nameIdx, contentIdx);
   let itemNo = 1;
-  const converted = rows
-    .map((row) => {
-      const name = clean(row[nameIdx]);
-      const content = clean(row[contentIdx]);
-      if (!name && !content) return '';
-      if (isHeaderLikeRow(row)) return '';
+  const converted = records
+    .map(({ name, content }) => {
       if (format === 'simple') return `${name}|${content}`;
       if (format === 'numbered') return `${itemNo++}. ${name} - ${content}`;
       return `${name}|\n${content}\n\n==================================================`;
     })
-    .filter(Boolean)
     .join('\n');
 
   resultText.value = converted;
   copyBtn.disabled = converted.length === 0;
   downloadBtn.disabled = converted.length === 0;
+}
+
+function buildStudentRecords(nameIdx, contentIdx) {
+  const records = [];
+
+  rows.forEach((row) => {
+    const name = clean(row[nameIdx]);
+    const content = clean(row[contentIdx]);
+    if (!name && !content) return;
+    if (isHeaderLikeRow(row)) return;
+
+    const lastRecord = records[records.length - 1];
+
+    if (name) {
+      if (lastRecord && lastRecord.name === name) {
+        appendContent(lastRecord, content);
+        return;
+      }
+      records.push({ name, content });
+      return;
+    }
+
+    if (content && lastRecord) {
+      appendContent(lastRecord, content);
+    }
+  });
+
+  return records.filter(record => record.name || record.content);
+}
+
+function appendContent(record, nextContent) {
+  if (!nextContent) return;
+  record.content = record.content
+    ? `${record.content}\n${nextContent}`
+    : nextContent;
 }
 
 function isHeaderLikeRow(row) {
