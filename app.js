@@ -1,16 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
   const links = [...document.querySelectorAll('.nav a')];
-  const sections = links
+  const sectionLinks = links.filter(link => link.getAttribute('href')?.startsWith('#'));
+  const sections = sectionLinks
     .map(link => document.querySelector(link.getAttribute('href')))
     .filter(Boolean);
 
   const setActive = () => {
+    if (sections.length === 0) return;
     const y = window.scrollY + 120;
     let current = sections[0]?.id || 'home';
     sections.forEach(section => {
       if (section.offsetTop <= y) current = section.id;
     });
-    links.forEach(link => {
+    sectionLinks.forEach(link => {
       link.classList.toggle('active', link.getAttribute('href') === `#${current}`);
     });
   };
