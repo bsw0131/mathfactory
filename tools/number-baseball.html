@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>숫자야구 게임 | 수학창의공작소</title>
+  <meta name="description" content="자리값과 추론을 연습하는 숫자야구 수업 게임" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css" />
+  <link rel="stylesheet" href="number-baseball.css" />
+</head>
+<body class="baseball-page">
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="../index.html" aria-label="수학창의공작소 홈">
+        <span class="brand-mark">Σ</span>
+        <span class="brand-text">
+          <strong>수학창의공작소</strong>
+          <em>by math chef</em>
+        </span>
+      </a>
+      <nav class="nav" aria-label="주요 메뉴">
+        <a href="../index.html#home">홈</a>
+        <a href="../index.html#math-tools" class="active">수학수업도움</a>
+        <a href="../index.html#school-tools">학교업무도움</a>
+        <a href="../index.html#about">소개</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="baseball-main">
+    <section class="baseball-hero container">
+      <a class="back-link" href="../index.html#math-tools">수학수업도움으로 돌아가기</a>
+      <p class="eyebrow">NUMBER BASEBALL</p>
+      <h2>숫자를 추론하는<br><span>숫자야구 게임</span></h2>
+      <p class="baseball-intro">서로 다른 숫자로 이루어진 정답을 스트라이크와 볼 단서로 찾아갑니다.</p>
+    </section>
+
+    <section class="baseball-app container" aria-label="숫자야구 게임 영역">
+      <section class="game-panel">
+        <div class="game-topline">
+          <div>
+            <span class="game-kicker">현재 게임</span>
+            <h3 id="modeTitle">3자리 숫자야구</h3>
+          </div>
+          <div class="score-box">
+            <strong id="attemptCount">0</strong>
+            <span>시도</span>
+          </div>
+        </div>
+
+        <div class="digit-display" id="digitDisplay" aria-label="입력한 숫자"></div>
+
+        <form class="guess-form" id="guessForm">
+          <label for="guessInput">예상 숫자</label>
+          <div class="guess-row">
+            <input id="guessInput" type="text" inputmode="numeric" autocomplete="off" maxlength="4" placeholder="예: 123" />
+            <button class="action-btn" type="submit">판정</button>
+          </div>
+          <p class="message" id="message">서로 다른 숫자를 입력하세요.</p>
+        </form>
+
+        <div class="keypad" id="keypad" aria-label="숫자 입력 키패드"></div>
+      </section>
+
+      <aside class="control-panel">
+        <div class="panel-title-row">
+          <span class="step-badge">1</span>
+          <div>
+            <h3>게임 설정</h3>
+            <p>학급 수준에 맞게 자리 수를 바꾸세요.</p>
+          </div>
+        </div>
+
+        <div class="mode-toggle" role="group" aria-label="자리 수 선택">
+          <button type="button" class="mode-btn active" data-length="3">3자리</button>
+          <button type="button" class="mode-btn" data-length="4">4자리</button>
+        </div>
+
+        <div class="button-stack">
+          <button class="action-btn" id="newGameBtn" type="button">새 게임</button>
+          <button class="action-btn secondary" id="revealBtn" type="button">정답 보기</button>
+        </div>
+
+        <div class="status-card" id="answerCard">
+          <span>정답</span>
+          <strong id="answerText">숨김</strong>
+        </div>
+
+        <div class="rule-card">
+          <div><strong>S</strong><span>숫자와 위치가 모두 맞음</span></div>
+          <div><strong>B</strong><span>숫자는 맞고 위치가 다름</span></div>
+          <div><strong>OUT</strong><span>맞는 숫자가 없음</span></div>
+        </div>
+      </aside>
+
+      <section class="history-panel">
+        <div class="panel-title-row compact">
+          <span class="step-badge">2</span>
+          <div>
+            <h3>시도 기록</h3>
+            <p>결과를 비교하며 다음 수를 정하세요.</p>
+          </div>
+        </div>
+        <div class="history-list" id="historyList">
+          <div class="empty-history">아직 기록이 없습니다.</div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner compact-footer">
+      <p>© 2026 수학창의공작소. Built with GitHub Pages.</p>
+      <div class="footer-links">
+        <a href="../index.html#math-tools">수학수업도움</a>
+        <a href="../index.html#about">소개</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="number-baseball.js"></script>
+</body>
+</html>
