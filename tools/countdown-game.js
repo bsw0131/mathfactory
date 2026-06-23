@@ -114,7 +114,7 @@ function applyPreset(preset) {
 
 function applyCustomGame() {
   const parsedNumbers = customNumbersInput.value
-    .split(/[,.\s]+/)
+    .split(/[,\s]+/)
     .map(value => Number(value.trim()))
     .filter(value => Number.isInteger(value) && value > 0);
   const parsedTarget = Number(customTargetInput.value);
@@ -234,8 +234,12 @@ function normalizeExpression(expression) {
 }
 
 function validateExpression(expression) {
-  if (!/^[0-9+\-*/().]+$/.test(expression)) {
+  if (!/^[0-9+\-*/()]+$/.test(expression)) {
     return { ok: false, message: '숫자, 괄호, 사칙연산 기호만 사용할 수 있습니다.' };
+  }
+
+  if (expression.includes('**')) {
+    return { ok: false, message: '거듭제곱은 사용할 수 없습니다. 사칙연산만 사용해 주세요.' };
   }
 
   const used = expression.match(/\d+/g)?.map(Number) || [];
