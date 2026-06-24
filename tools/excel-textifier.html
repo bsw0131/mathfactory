@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>엑셀 텍스트화 | 수학력발전소</title>
+  <meta name="description" content="엑셀 파일에서 원하는 시트와 여러 열을 선택해 복사하기 좋은 텍스트로 변환하는 학교 업무 도구" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css" />
+  <link rel="stylesheet" href="excel-textifier.css" />
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</head>
+<body class="excel-tool-page">
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="../index.html" aria-label="수학력발전소 홈">
+        <span class="brand-mark">Σ</span>
+        <span class="brand-text">
+          <strong>수학력발전소</strong>
+          <em>by math chef</em>
+        </span>
+      </a>
+      <nav class="nav" aria-label="주요 메뉴">
+        <a href="../index.html#home">홈</a>
+        <a href="../index.html#math-tools">수학수업도움</a>
+        <a href="../index.html#school-tools" class="active">학교업무도움</a>
+        <a href="../index.html#about">소개</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="tool-page-main">
+    <section class="tool-hero-small container">
+      <a class="back-link" href="../index.html#school-tools">학교업무도움으로 돌아가기</a>
+      <p class="eyebrow">EXCEL TEXTIFIER</p>
+      <h2>엑셀 자료를<br><span>복사하기 좋은 텍스트로.</span></h2>
+      <p class="tool-intro">엑셀 파일을 올리고 시트, 열 개수, 원하는 열을 선택하면 필요한 정보만 보기 좋게 정리합니다. 파일은 브라우저 안에서만 처리됩니다.</p>
+    </section>
+
+    <section class="tool-app container" aria-label="엑셀 텍스트화 작업 영역">
+      <div class="panel input-panel">
+        <div class="panel-title-row">
+          <span class="step-badge">1</span>
+          <div>
+            <h3>엑셀 파일과 열 선택</h3>
+            <p>시트를 고른 뒤 뽑아낼 열 개수와 열을 지정하세요.</p>
+          </div>
+        </div>
+
+        <div class="form-group file-group">
+          <label for="fileInput">엑셀 파일</label>
+          <input id="fileInput" type="file" accept=".xlsx,.xls,.csv" />
+          <small>.xlsx, .xls, .csv 파일을 사용할 수 있습니다.</small>
+        </div>
+
+        <div class="form-group">
+          <label for="sheetSelect">시트 선택</label>
+          <select id="sheetSelect" disabled>
+            <option>파일을 먼저 선택하세요</option>
+          </select>
+        </div>
+
+        <div class="inline-grid">
+          <div class="form-group">
+            <label for="columnCount">뽑아낼 열 개수</label>
+            <input id="columnCount" type="number" min="1" max="12" value="3" disabled />
+          </div>
+          <div class="form-group">
+            <label for="headerRowSelect">제목 행</label>
+            <select id="headerRowSelect" disabled>
+              <option value="auto">자동 찾기</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="column-select-panel" id="columnSelectPanel">
+          <div class="empty-selects">파일을 올리면 선택할 열 목록이 표시됩니다.</div>
+        </div>
+
+        <div class="inline-grid">
+          <div class="form-group">
+            <label for="formatSelect">출력 형식</label>
+            <select id="formatSelect">
+              <option value="labeled">항목명: 값 + 줄바꿈</option>
+              <option value="pipe">값 | 값 | 값</option>
+              <option value="tab">탭으로 구분</option>
+              <option value="sentence">문장형으로 이어쓰기</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="rowSeparatorSelect">행 구분</label>
+            <select id="rowSeparatorSelect">
+              <option value="blank">빈 줄</option>
+              <option value="line">구분선</option>
+              <option value="none">줄바꿈만</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="option-grid">
+          <label class="toggle-row"><input id="includeHeader" type="checkbox" checked /> <span>항목명 포함</span></label>
+          <label class="toggle-row"><input id="skipEmptyRows" type="checkbox" checked /> <span>빈 행 제외</span></label>
+        </div>
+
+        <div class="button-row">
+          <button class="action-btn" id="convertBtn" disabled>텍스트 변환</button>
+          <button class="action-btn secondary" id="clearBtn">초기화</button>
+        </div>
+
+        <div class="notice">
+          개인정보 보호를 위해 변환 작업은 서버로 전송하지 않고 현재 브라우저에서만 처리됩니다.
+        </div>
+      </div>
+
+      <div class="panel result-panel">
+        <div class="panel-title-row">
+          <span class="step-badge">2</span>
+          <div>
+            <h3>미리보기와 결과</h3>
+            <p>엑셀 내용을 확인하고 결과를 복사하거나 내려받으세요.</p>
+          </div>
+        </div>
+
+        <div class="form-group preview-group">
+          <label>엑셀 미리보기</label>
+          <div class="preview-table-wrap" id="previewArea">
+            <table class="preview-table"><tbody><tr><td>엑셀 파일을 선택하면 이곳에 일부 행이 표시됩니다.</td></tr></tbody></table>
+          </div>
+        </div>
+
+        <div class="result-summary" id="resultSummary">선택한 열과 변환 결과가 여기에 표시됩니다.</div>
+
+        <div class="form-group result-group">
+          <label for="resultText">변환 결과</label>
+          <textarea id="resultText" placeholder="변환 결과가 이곳에 표시됩니다."></textarea>
+        </div>
+
+        <div class="button-row">
+          <button class="action-btn" id="copyBtn" disabled>결과 복사</button>
+          <button class="action-btn secondary" id="downloadBtn" disabled>TXT 다운로드</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner compact-footer">
+      <p>© 2026 수학력발전소. Built with GitHub Pages.</p>
+      <div class="footer-links">
+        <a href="../index.html#school-tools">학교업무도움</a>
+        <a href="../index.html#about">소개</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="excel-textifier.js"></script>
+</body>
+</html>
