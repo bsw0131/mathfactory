@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>카운트다운 게임 | 수학창의공작소</title>
+  <title>카운트다운 게임 | 수학력발전소</title>
   <meta name="description" content="주어진 숫자와 사칙연산으로 목표 수에 최대한 가깝게 만드는 카운트다운 수학 게임" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,160 +12,18 @@
   <link rel="stylesheet" href="countdown-game.css" />
 </head>
 <body class="countdown-page">
-  <header class="site-header">
-    <div class="container header-inner">
-      <a class="brand" href="../index.html" aria-label="수학창의공작소 홈">
-        <span class="brand-mark">Σ</span>
-        <span class="brand-text">
-          <strong>수학창의공작소</strong>
-          <em>by math chef</em>
-        </span>
-      </a>
-      <nav class="nav" aria-label="주요 메뉴">
-        <a href="../index.html#home">홈</a>
-        <a href="../index.html#math-tools" class="active">수학수업도움</a>
-        <a href="../index.html#school-tools">학교업무도움</a>
-        <a href="../index.html#about">소개</a>
-      </nav>
-    </div>
-  </header>
+  <header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="수학력발전소 홈"><span class="brand-mark">Σ</span><span class="brand-text"><strong>수학력발전소</strong><em>by math chef</em></span></a><nav class="nav" aria-label="주요 메뉴"><a href="../index.html#home">홈</a><a href="../index.html#math-tools" class="active">수학수업도움</a><a href="../index.html#school-tools">학교업무도움</a><a href="../index.html#about">소개</a></nav></div></header>
 
   <main class="countdown-main">
-    <section class="countdown-hero container">
-      <a class="back-link" href="../index.html#math-tools">수학수업도움으로 돌아가기</a>
-      <p class="eyebrow">COUNTDOWN NUMBERS</p>
-      <h2>목표 수에 가까워지는<br><span>카운트다운 게임</span></h2>
-      <p class="countdown-intro">주어진 숫자를 한 번씩만 사용하고 사칙연산으로 목표 수에 최대한 가깝게 만들어 보세요.</p>
-    </section>
-
+    <section class="countdown-hero container"><a class="back-link" href="../index.html#math-tools">수학수업도움으로 돌아가기</a><p class="eyebrow">COUNTDOWN NUMBERS</p><h2>목표 수에 가까워지는<br><span>카운트다운 게임</span></h2><p class="countdown-intro">주어진 숫자를 한 번씩만 사용하고 사칙연산으로 목표 수에 최대한 가깝게 만들어 보세요.</p></section>
     <section class="countdown-app container" aria-label="카운트다운 게임 영역">
-      <section class="game-panel">
-        <div class="game-topline">
-          <div>
-            <span class="game-kicker">현재 문제</span>
-            <h3>목표 <span id="targetText">137</span></h3>
-          </div>
-          <div class="timer-box" id="timerBox">
-            <strong id="timeLeft">60</strong>
-            <span>초</span>
-          </div>
-        </div>
-
-        <div class="target-board">
-          <span>목표 수</span>
-          <strong id="targetBoard">137</strong>
-        </div>
-
-        <div class="number-row" id="numberRow" aria-label="사용 가능한 숫자"></div>
-
-        <div class="expression-box">
-          <label for="expressionInput">식 만들기</label>
-          <div class="expression-row">
-            <input id="expressionInput" type="text" inputmode="text" autocomplete="off" placeholder="예: 25*4+8*3+2+1" />
-            <button class="action-btn" id="checkBtn" type="button">확인</button>
-          </div>
-          <div class="operator-pad" aria-label="연산 입력 버튼">
-            <button type="button" data-token="+">+</button>
-            <button type="button" data-token="-">-</button>
-            <button type="button" data-token="*">×</button>
-            <button type="button" data-token="/">÷</button>
-            <button type="button" data-token="(">(</button>
-            <button type="button" data-token=")">)</button>
-            <button type="button" id="backspaceBtn">⌫</button>
-            <button type="button" id="clearBtn">초기화</button>
-          </div>
-          <p class="message" id="message">숫자 카드를 눌러 식을 만들거나 직접 입력하세요.</p>
-        </div>
-      </section>
-
-      <aside class="control-panel">
-        <div class="panel-title-row">
-          <span class="step-badge">1</span>
-          <div>
-            <h3>게임 설정</h3>
-            <p>수준과 수업 흐름에 맞게 문제를 바꾸세요.</p>
-          </div>
-        </div>
-
-        <div class="preset-row" role="group" aria-label="빠른 설정">
-          <button class="preset-btn active" type="button" data-preset="classic">기본</button>
-          <button class="preset-btn" type="button" data-preset="easy">쉬움</button>
-          <button class="preset-btn" type="button" data-preset="hard">어려움</button>
-        </div>
-
-        <div class="settings-grid">
-          <label>제한시간
-            <input id="timeInput" type="number" min="10" max="300" step="5" value="60" />
-          </label>
-          <label>숫자 개수
-            <input id="countInput" type="number" min="4" max="7" value="6" />
-          </label>
-          <label>큰 수 개수
-            <input id="largeCountInput" type="number" min="0" max="4" value="1" />
-          </label>
-          <label>작은 수 최대값
-            <input id="smallMaxInput" type="number" min="5" max="20" value="10" />
-          </label>
-          <label>목표 최소
-            <input id="targetMinInput" type="number" min="10" max="999" value="100" />
-          </label>
-          <label>목표 최대
-            <input id="targetMaxInput" type="number" min="10" max="999" value="999" />
-          </label>
-        </div>
-
-        <label class="wide-label">직접 숫자 입력
-          <input id="customNumbersInput" type="text" value="25, 8, 4, 3, 2, 1" placeholder="예: 25, 8, 4, 3, 2, 1" />
-        </label>
-        <label class="wide-label">직접 목표 입력
-          <input id="customTargetInput" type="number" min="1" max="9999" value="137" />
-        </label>
-
-        <div class="button-stack">
-          <button class="action-btn" id="applyCustomBtn" type="button">직접 문제 적용</button>
-          <button class="action-btn secondary" id="randomGameBtn" type="button">랜덤 문제</button>
-          <button class="action-btn secondary" id="startBtn" type="button">타이머 시작</button>
-        </div>
-      </aside>
-
-      <section class="result-panel">
-        <div class="panel-title-row compact">
-          <span class="step-badge">2</span>
-          <div>
-            <h3>결과와 정답 예시</h3>
-            <p>가까운 정도와 가능한 최적식을 확인하세요.</p>
-          </div>
-        </div>
-        <div class="result-grid">
-          <div class="result-card">
-            <span>내 결과</span>
-            <strong id="myResult">-</strong>
-            <p id="myDiff">식을 입력하면 결과가 표시됩니다.</p>
-          </div>
-          <div class="result-card solution-card">
-            <span>컴퓨터가 찾은 최적식</span>
-            <strong id="bestResult">준비됨</strong>
-            <p id="bestExpression">정답 보기를 누르면 예시 식을 보여줍니다.</p>
-          </div>
-        </div>
-        <div class="button-stack result-actions">
-          <button class="action-btn" id="solveBtn" type="button">정답 보기</button>
-          <button class="action-btn secondary" id="resetExpressionBtn" type="button">식 다시 쓰기</button>
-        </div>
-      </section>
+      <section class="game-panel"><div class="game-topline"><div><span class="game-kicker">현재 문제</span><h3>목표 <span id="targetText">137</span></h3></div><div class="timer-box" id="timerBox"><strong id="timeLeft">60</strong><span>초</span></div></div><div class="target-board"><span>목표 수</span><strong id="targetBoard">137</strong></div><div class="number-row" id="numberRow" aria-label="사용 가능한 숫자"></div><div class="expression-box"><label for="expressionInput">식 만들기</label><div class="expression-row"><input id="expressionInput" type="text" inputmode="text" autocomplete="off" placeholder="예: 25*4+8*3+2+1" /><button class="action-btn" id="checkBtn" type="button">확인</button></div><div class="operator-pad" aria-label="연산 입력 버튼"><button type="button" data-token="+">+</button><button type="button" data-token="-">-</button><button type="button" data-token="*">×</button><button type="button" data-token="/">÷</button><button type="button" data-token="(">(</button><button type="button" data-token=")">)</button><button type="button" id="backspaceBtn">⌫</button><button type="button" id="clearBtn">초기화</button></div><p class="message" id="message">숫자 카드를 눌러 식을 만들거나 직접 입력하세요.</p></div></section>
+      <aside class="control-panel"><div class="panel-title-row"><span class="step-badge">1</span><div><h3>게임 설정</h3><p>수준과 수업 흐름에 맞게 문제를 바꾸세요.</p></div></div><div class="preset-row" role="group" aria-label="빠른 설정"><button class="preset-btn active" type="button" data-preset="classic">기본</button><button class="preset-btn" type="button" data-preset="easy">쉬움</button><button class="preset-btn" type="button" data-preset="hard">어려움</button></div><div class="settings-grid"><label>제한시간<input id="timeInput" type="number" min="10" max="300" step="5" value="60" /></label><label>숫자 개수<input id="countInput" type="number" min="4" max="7" value="6" /></label><label>큰 수 개수<input id="largeCountInput" type="number" min="0" max="4" value="1" /></label><label>작은 수 최대값<input id="smallMaxInput" type="number" min="5" max="20" value="10" /></label><label>목표 최소<input id="targetMinInput" type="number" min="10" max="999" value="100" /></label><label>목표 최대<input id="targetMaxInput" type="number" min="10" max="999" value="999" /></label></div><label class="wide-label">직접 숫자 입력<input id="customNumbersInput" type="text" value="25, 8, 4, 3, 2, 1" placeholder="예: 25, 8, 4, 3, 2, 1" /></label><label class="wide-label">직접 목표 입력<input id="customTargetInput" type="number" min="1" max="9999" value="137" /></label><div class="button-stack"><button class="action-btn" id="applyCustomBtn" type="button">직접 문제 적용</button><button class="action-btn secondary" id="randomGameBtn" type="button">랜덤 문제</button><button class="action-btn secondary" id="startBtn" type="button">타이머 시작</button></div></aside>
+      <section class="result-panel"><div class="panel-title-row compact"><span class="step-badge">2</span><div><h3>결과와 정답 예시</h3><p>가까운 정도와 가능한 최적식을 확인하세요.</p></div></div><div class="result-grid"><div class="result-card"><span>내 결과</span><strong id="myResult">-</strong><p id="myDiff">식을 입력하면 결과가 표시됩니다.</p></div><div class="result-card solution-card"><span>컴퓨터가 찾은 최적식</span><strong id="bestResult">준비됨</strong><p id="bestExpression">정답 보기를 누르면 예시 식을 보여줍니다.</p></div></div><div class="button-stack result-actions"><button class="action-btn" id="solveBtn" type="button">정답 보기</button><button class="action-btn secondary" id="resetExpressionBtn" type="button">식 다시 쓰기</button></div></section>
     </section>
   </main>
 
-  <footer class="footer">
-    <div class="container footer-inner compact-footer">
-      <p>© 2026 수학창의공작소. Built with GitHub Pages.</p>
-      <div class="footer-links">
-        <a href="../index.html#math-tools">수학수업도움</a>
-        <a href="../index.html#about">소개</a>
-      </div>
-    </div>
-  </footer>
-
+  <footer class="footer"><div class="container footer-inner compact-footer"><p>© 2026 수학력발전소. Built with GitHub Pages.</p><div class="footer-links"><a href="../index.html#math-tools">수학수업도움</a><a href="../index.html#about">소개</a></div></div></footer>
   <script src="countdown-game.js"></script>
 </body>
 </html>
