@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>워드클라우드 생성 | 수학력발전소</title>
+  <meta name="description" content="단어와 문장을 입력하면 빈도에 따라 워드클라우드 이미지를 생성하는 학교 업무 도구" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css" />
+  <link rel="stylesheet" href="excel-textifier.css" />
+  <link rel="stylesheet" href="word-cloud.css" />
+</head>
+<body class="word-cloud-page">
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="../index.html" aria-label="수학력발전소 홈">
+        <span class="brand-mark">Σ</span>
+        <span class="brand-text"><strong>수학력발전소</strong><em>by math chef</em></span>
+      </a>
+      <nav class="nav" aria-label="주요 메뉴">
+        <a href="../index.html#home">홈</a>
+        <a href="../index.html#math-tools">수학수업도움</a>
+        <a href="../index.html#school-tools" class="active">학교업무도움</a>
+        <a href="../index.html#about">소개</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="tool-page-main">
+    <section class="tool-hero-small container">
+      <a class="back-link" href="../index.html#school-tools">학교업무도움으로 돌아가기</a>
+      <p class="eyebrow">WORD CLOUD GENERATOR</p>
+      <h2>단어를 넣으면<br><span>워드클라우드 이미지로.</span></h2>
+      <p class="tool-intro">설문 응답, 학급 의견, 회의 키워드를 붙여 넣으면 많이 나온 단어를 크게 배치해 PNG 이미지로 만들 수 있습니다. 입력 내용은 브라우저 안에서만 처리됩니다.</p>
+    </section>
+
+    <section class="tool-app container" aria-label="워드클라우드 생성 작업 영역">
+      <div class="panel input-panel">
+        <div class="panel-title-row">
+          <span class="step-badge">1</span>
+          <div>
+            <h3>단어 입력과 설정</h3>
+            <p>문장이나 단어 목록을 붙여 넣고 이미지 모양을 고르세요.</p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="wordInput">단어 또는 문장</label>
+          <textarea id="wordInput" class="word-input" placeholder="예: 협력 소통 배려 성장 성장 수학 탐구 질문 질문 질문\n또는 설문 응답 문장을 그대로 붙여 넣어도 됩니다."></textarea>
+          <small>쉼표, 줄바꿈, 공백으로 단어를 구분합니다. 같은 단어가 많을수록 크게 표시됩니다.</small>
+        </div>
+
+        <div class="inline-grid">
+          <div class="form-group">
+            <label for="maxWords">최대 단어 수</label>
+            <input id="maxWords" type="number" min="10" max="120" value="55" />
+          </div>
+          <div class="form-group">
+            <label for="shapeSelect">배치 모양</label>
+            <select id="shapeSelect">
+              <option value="oval">타원형</option>
+              <option value="wide">넓은 직사각형</option>
+              <option value="circle">원형</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="inline-grid">
+          <div class="form-group">
+            <label for="paletteSelect">색상</label>
+            <select id="paletteSelect">
+              <option value="school">민트와 네이비</option>
+              <option value="bright">밝은 교실</option>
+              <option value="mono">단정한 단색</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="backgroundSelect">배경</label>
+            <select id="backgroundSelect">
+              <option value="white">흰색</option>
+              <option value="soft">연한 민트</option>
+              <option value="transparent">투명 PNG</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="option-grid">
+          <label class="toggle-row"><input id="ignoreNumbers" type="checkbox" checked /> <span>숫자 제외</span></label>
+          <label class="toggle-row"><input id="mergeCase" type="checkbox" checked /> <span>영문 대소문자 통합</span></label>
+        </div>
+
+        <div class="button-row">
+          <button class="action-btn" id="generateBtn">워드클라우드 생성</button>
+          <button class="action-btn secondary" id="sampleBtn">예시 넣기</button>
+          <button class="action-btn secondary" id="clearBtn">초기화</button>
+        </div>
+
+        <div class="notice">
+          단어 분석과 이미지 생성은 서버로 전송하지 않고 현재 브라우저에서만 처리됩니다.
+        </div>
+      </div>
+
+      <div class="panel result-panel word-result-panel">
+        <div class="panel-title-row">
+          <span class="step-badge">2</span>
+          <div>
+            <h3>워드클라우드 이미지</h3>
+            <p>결과를 확인한 뒤 PNG 이미지로 내려받으세요.</p>
+          </div>
+        </div>
+
+        <div class="word-cloud-stage" id="cloudStage">
+          <canvas id="wordCloudCanvas" width="1000" height="640" aria-label="워드클라우드 결과 이미지"></canvas>
+        </div>
+
+        <div class="result-summary" id="wordSummary">단어를 입력한 뒤 생성 버튼을 누르면 이미지가 표시됩니다.</div>
+
+        <div class="keyword-list" id="keywordList" aria-label="상위 단어 목록"></div>
+
+        <div class="button-row">
+          <button class="action-btn" id="downloadBtn" disabled>PNG 다운로드</button>
+          <button class="action-btn secondary" id="copyImageBtn" disabled>이미지 복사</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner compact-footer">
+      <p>© 2026 수학력발전소. Built with GitHub Pages.</p>
+      <div class="footer-links">
+        <a href="../index.html#school-tools">학교업무도움</a>
+        <a href="../index.html#about">소개</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="word-cloud.js"></script>
+</body>
+</html>
