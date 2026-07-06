@@ -1,0 +1,85 @@
+.word-cloud-page {
+  background:
+    radial-gradient(circle at 88% 8%, rgba(0, 184, 169, .14), transparent 30%),
+    radial-gradient(circle at 8% 12%, rgba(255, 122, 61, .09), transparent 28%),
+    linear-gradient(180deg, #f8fbff 0%, #ffffff 64%);
+}
+
+.word-cloud-page .tool-app {
+  grid-template-columns: minmax(340px, .88fr) minmax(480px, 1.12fr);
+}
+
+.word-input {
+  min-height: 280px;
+}
+
+.word-result-panel {
+  min-height: 760px;
+}
+
+.word-cloud-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 25 / 16;
+  overflow: hidden;
+  border: 1px solid #dfe6f2;
+  border-radius: 8px;
+  background:
+    linear-gradient(90deg, rgba(70, 88, 255, .045) 1px, transparent 1px),
+    linear-gradient(rgba(70, 88, 255, .045) 1px, transparent 1px),
+    #fff;
+  background-size: 28px 28px;
+}
+
+#wordCloudCanvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.keyword-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-height: 44px;
+  margin: 0 0 22px;
+}
+
+.keyword-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid #dcefe9;
+  border-radius: 999px;
+  background: #f4fffb;
+  color: #0c7563;
+  padding: 7px 11px;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.keyword-chip b {
+  color: #071a44;
+}
+
+@media (max-width: 980px) {
+  .word-cloud-page .tool-app {
+    grid-template-columns: 1fr;
+  }
+
+  .word-result-panel {
+    min-height: auto;
+  }
+}
+
+@media (max-width: 620px) {
+  .word-input {
+    min-height: 240px;
+  }
+
+  .word-cloud-stage {
+    aspect-ratio: 1 / 1;
+  }
+}
