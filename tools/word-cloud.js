@@ -67,7 +67,7 @@ function generateCloud() {
 }
 
 function getWordCounts() {
-  const maxWords = clamp(Number(maxWordsInput.value) || 55, 10, 120);
+  const maxWords = clamp(Number(maxWordsInput.value) || 100, 10, 100);
   maxWordsInput.value = maxWords;
   const tokens = wordInput.value
     .replace(/[.,!?;:()[\]{}"'“”‘’·…]/g, ' ')
@@ -203,7 +203,7 @@ function renderEmptyCanvas(message = 'WORD CLOUD') {
 
 function resetAll() {
   wordInput.value = '';
-  maxWordsInput.value = 55;
+  maxWordsInput.value = 100;
   shapeSelect.value = 'oval';
   paletteSelect.value = 'school';
   backgroundSelect.value = 'white';
