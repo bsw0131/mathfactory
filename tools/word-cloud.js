@@ -107,20 +107,59 @@ function drawCloud(words) {
   }
 
   paintBackground(cssWidth, cssHeight);
+  const fittedLayout = fitLayoutToCanvas(bestLayout, cssWidth, cssHeight);
   const colors = palettes[paletteSelect.value] || palettes.school;
-  bestLayout.forEach((item, index) => {
-    ctx.save();
-    ctx.translate(item.x, item.y);
-    ctx.rotate(item.angle);
-    ctx.font = `900 ${item.fontSize}px 'Noto Sans KR', system-ui, sans-serif`;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillStyle = colors[index % colors.length];
-    ctx.fillText(item.text, 0, 0);
-    ctx.restore();
-  });
+  fittedLayout.forEach((item, index) => drawWord(item, colors[index % colors.length]));
 
-  return bestLayout.map(item => ({ text: item.text, count: item.count }));
+  return fittedLayout.map(item => ({ text: item.text, count: item.count }));
+}
+
+function fitLayoutToCanvas(layout, width, height) {
+  if (layout.length === 0) return layout;
+
+  const margin = 24;
+  const bounds = getLayoutBounds(layout);
+  const boundsWidth = Math.max(1, bounds.right - bounds.left);
+  const boundsHeight = Math.max(1, bounds.bottom - bounds.top);
+  const scale = Math.min(
+    (width - margin * 2) / boundsWidth,
+    (height - margin * 2) / boundsHeight,
+    2.35
+  );
+  const offsetX = width / 2 - ((bounds.left + bounds.right) / 2) * scale;
+  const offsetY = height / 2 - ((bounds.top + bounds.bottom) / 2) * scale;
+
+  return layout.map(item => ({
+    ...item,
+    x: item.x * scale + offsetX,
+    y: item.y * scale + offsetY,
+    fontSize: Math.max(7, Math.round(item.fontSize * scale)),
+    left: item.left * scale + offsetX,
+    right: item.right * scale + offsetX,
+    top: item.top * scale + offsetY,
+    bottom: item.bottom * scale + offsetY
+  }));
+}
+
+function getLayoutBounds(layout) {
+  return layout.reduce((bounds, item) => ({
+    left: Math.min(bounds.left, item.left),
+    right: Math.max(bounds.right, item.right),
+    top: Math.min(bounds.top, item.top),
+    bottom: Math.max(bounds.bottom, item.bottom)
+  }), { left: Infinity, right: -Infinity, top: Infinity, bottom: -Infinity });
+}
+
+function drawWord(item, color) {
+  ctx.save();
+  ctx.translate(item.x, item.y);
+  ctx.rotate(item.angle);
+  ctx.font = `900 ${item.fontSize}px 'Noto Sans KR', system-ui, sans-serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillStyle = color;
+  ctx.fillText(item.text, 0, 0);
+  ctx.restore();
 }
 
 function getFontRanges(count) {
