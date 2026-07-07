@@ -57,13 +57,15 @@ function generateCloud() {
     return;
   }
 
-  drawCloud(words);
+  const placedWords = drawCloud(words);
   renderKeywordList(words);
   const total = words.reduce((sum, item) => sum + item.count, 0);
-  summary.textContent = `총 ${total}개 단어를 분석해 상위 ${words.length}개 단어로 워드클라우드를 만들었습니다.`;
-  hasCloud = true;
-  downloadBtn.disabled = false;
-  copyImageBtn.disabled = !navigator.clipboard || typeof ClipboardItem === 'undefined';
+  summary.textContent = placedWords.length === words.length
+    ? `총 ${total}개 단어를 분석해 상위 ${words.length}개 단어를 모두 워드클라우드에 표시했습니다.`
+    : `총 ${total}개 단어를 분석해 상위 ${words.length}개 중 ${placedWords.length}개 단어를 워드클라우드에 표시했습니다. 단어가 너무 많거나 길면 일부는 이미지 안에 들어가지 않을 수 있습니다.`;
+  hasCloud = placedWords.length > 0;
+  downloadBtn.disabled = !hasCloud;
+  copyImageBtn.disabled = !hasCloud || !navigator.clipboard || typeof ClipboardItem === 'undefined';
 }
 
 function getWordCounts() {
@@ -95,52 +97,82 @@ function drawCloud(words) {
   canvas.width = Math.round(cssWidth * dpr);
   canvas.height = Math.round(cssHeight * dpr);
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  const ranges = getFontRanges(words.length);
+  let bestLayout = [];
+  for (const range of ranges) {
+    const layout = buildLayout(words, cssWidth, cssHeight, range.min, range.max);
+    if (layout.length > bestLayout.length) bestLayout = layout;
+    if (layout.length === words.length) break;
+  }
+
   paintBackground(cssWidth, cssHeight);
-
-  const max = words[0].count;
-  const min = words[words.length - 1].count;
-  const placed = [];
   const colors = palettes[paletteSelect.value] || palettes.school;
-
-  words.forEach((word, index) => {
-    const ratio = max === min ? 1 : (word.count - min) / (max - min);
-    const fontSize = Math.round(22 + ratio * 66 * (index < 3 ? 1.08 : 1));
-    const angle = index < 8 ? 0 : chooseAngle(index);
-    const placement = findPlacement(word.text, fontSize, angle, placed, cssWidth, cssHeight);
-    if (!placement) return;
-
-    placed.push(placement.box);
+  bestLayout.forEach((item, index) => {
     ctx.save();
-    ctx.translate(placement.x, placement.y);
-    ctx.rotate(angle);
-    ctx.font = `900 ${fontSize}px 'Noto Sans KR', system-ui, sans-serif`;
+    ctx.translate(item.x, item.y);
+    ctx.rotate(item.angle);
+    ctx.font = `900 ${item.fontSize}px 'Noto Sans KR', system-ui, sans-serif`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillStyle = colors[index % colors.length];
-    ctx.fillText(word.text, 0, 0);
+    ctx.fillText(item.text, 0, 0);
     ctx.restore();
   });
+
+  return bestLayout.map(item => ({ text: item.text, count: item.count }));
+}
+
+function getFontRanges(count) {
+  if (count <= 20) return [{ min: 18, max: 82 }, { min: 14, max: 64 }, { min: 11, max: 48 }];
+  if (count <= 40) return [{ min: 14, max: 56 }, { min: 11, max: 44 }, { min: 9, max: 34 }];
+  if (count <= 70) return [{ min: 11, max: 42 }, { min: 9, max: 34 }, { min: 8, max: 28 }];
+  return [{ min: 9, max: 34 }, { min: 8, max: 28 }, { min: 7, max: 23 }];
+}
+
+function buildLayout(words, width, height, minFont, maxFont) {
+  const max = words[0].count;
+  const min = words[words.length - 1].count;
+  const placed = [];
+
+  words.forEach((word, index) => {
+    const ratio = max === min ? .55 : (word.count - min) / (max - min);
+    const baseFontSize = Math.round(minFont + ratio * (maxFont - minFont));
+    const angles = getAngles(index);
+    const minAllowed = Math.max(7, Math.floor(minFont * .72));
+
+    for (let fontSize = baseFontSize; fontSize >= minAllowed; fontSize -= 2) {
+      for (const angle of angles) {
+        const placement = findPlacement(word.text, fontSize, angle, placed, width, height);
+        if (!placement) continue;
+        placed.push({ ...placement.box, x: placement.x, y: placement.y, angle, fontSize, text: word.text, count: word.count });
+        return;
+      }
+    }
+  });
+
+  return placed;
 }
 
 function findPlacement(text, fontSize, angle, placed, width, height) {
   ctx.font = `900 ${fontSize}px 'Noto Sans KR', system-ui, sans-serif`;
   const metrics = ctx.measureText(text);
-  const rawW = metrics.width + 20;
-  const rawH = fontSize * 1.22 + 14;
+  const rawW = metrics.width + 10;
+  const rawH = fontSize * 1.14 + 8;
   const boxW = Math.abs(Math.cos(angle)) * rawW + Math.abs(Math.sin(angle)) * rawH;
   const boxH = Math.abs(Math.sin(angle)) * rawW + Math.abs(Math.cos(angle)) * rawH;
   const centerX = width / 2;
   const centerY = height / 2;
   const maxRadius = Math.min(width, height) * .48;
 
-  for (let step = 0; step < 1200; step += 1) {
-    const theta = step * .42;
-    const radius = 3.8 * Math.sqrt(step);
+  for (let step = 0; step < 3500; step += 1) {
+    const theta = step * .37;
+    const radius = 2.55 * Math.sqrt(step);
     const x = centerX + Math.cos(theta) * radius * xScale();
     const y = centerY + Math.sin(theta) * radius * yScale();
     const box = { left: x - boxW / 2, right: x + boxW / 2, top: y - boxH / 2, bottom: y + boxH / 2 };
 
-    if (box.left < 24 || box.right > width - 24 || box.top < 24 || box.bottom > height - 24) continue;
+    if (box.left < 14 || box.right > width - 14 || box.top < 14 || box.bottom > height - 14) continue;
     if (!insideShape(x, y, boxW, boxH, centerX, centerY, maxRadius, width, height)) continue;
     if (placed.some(item => intersects(box, item))) continue;
     return { x, y, box };
@@ -151,14 +183,21 @@ function findPlacement(text, fontSize, angle, placed, width, height) {
 function insideShape(x, y, boxW, boxH, centerX, centerY, radius, width, height) {
   const shape = shapeSelect.value;
   if (shape === 'wide') return true;
-  const rx = shape === 'circle' ? radius : width * .45;
-  const ry = shape === 'circle' ? radius : height * .40;
-  const value = ((x - centerX) ** 2) / ((rx - boxW / 2) ** 2) + ((y - centerY) ** 2) / ((ry - boxH / 2) ** 2);
+  const rx = shape === 'circle' ? radius : width * .47;
+  const ry = shape === 'circle' ? radius : height * .43;
+  const safeRx = Math.max(1, rx - boxW / 2);
+  const safeRy = Math.max(1, ry - boxH / 2);
+  const value = ((x - centerX) ** 2) / (safeRx ** 2) + ((y - centerY) ** 2) / (safeRy ** 2);
   return value <= 1;
 }
 
+function getAngles(index) {
+  if (index < 8) return [0, -Math.PI / 18, Math.PI / 18, -Math.PI / 2, Math.PI / 2];
+  return [chooseAngle(index), 0, -Math.PI / 18, Math.PI / 18, -Math.PI / 2, Math.PI / 2];
+}
+
 function chooseAngle(index) {
-  const angles = [0, 0, 0, -Math.PI / 18, Math.PI / 18, -Math.PI / 2, Math.PI / 2];
+  const angles = [0, 0, -Math.PI / 18, Math.PI / 18, -Math.PI / 12, Math.PI / 12, -Math.PI / 2, Math.PI / 2];
   return angles[index % angles.length];
 }
 
@@ -183,7 +222,7 @@ function paintBackground(width, height) {
 }
 
 function renderKeywordList(words) {
-  keywordList.innerHTML = words.slice(0, 16).map(word => (
+  keywordList.innerHTML = words.map(word => (
     `<span class="keyword-chip">${escapeHtml(word.text)} <b>${word.count}</b></span>`
   )).join('');
 }
